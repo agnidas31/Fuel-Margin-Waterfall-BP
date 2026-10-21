@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fuel Margin Waterfall · Agnivesh Das</title>
+<meta name="description" content="How a single cents-per-gallon margin number was broken into the drivers behind it, so pricing and supply teams could see not just what the margin was, but why.">
+<meta property="og:title" content="The Fuel Margin Waterfall · Agnivesh Das">
+<meta property="og:description" content="How a single cents-per-gallon margin number was broken into the drivers behind it, so pricing and supply teams could see not just what the margin was, but why.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #17202b; --muted: #556070; --faint: #8a94a2; --rule: #dde3ea;
+    --bg: #ffffff; --bg-soft: #f4f7f9; --accent: #0e5a63; --accent-soft: #e8f2f3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 17px; line-height: 1.7;
+  }
+  a { color: var(--accent); }
+  .top { border-bottom: 1px solid var(--rule); background: #fff; position: sticky; top: 0; z-index: 5; }
+  .top .wrap { display: flex; justify-content: space-between; align-items: center; height: 56px; gap: 12px; }
+  .top a { text-decoration: none; font-weight: 600; font-size: 14px; }
+  .brand { font-family: "Lora", Georgia, serif; font-size: 18px; color: var(--ink); }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+  .tabs { display: flex; gap: 8px; margin: 28px 0 0; flex-wrap: wrap; }
+  .tabs a { padding: 6px 14px; border-radius: 99px; border: 1px solid var(--rule); color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600; }
+  .tabs a.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  article { padding: 18px 0 60px; }
+  article > p:first-child { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 1.1px; text-transform: uppercase; margin-bottom: 0; }
+  h1 { font-family: "Lora", Georgia, serif; font-size: clamp(32px, 5vw, 46px); line-height: 1.12; margin: 8px 0 16px; }
+  h1 + p { font-size: 20px; color: var(--ink); }
+  h2 { font-family: "Lora", Georgia, serif; font-size: 28px; margin: 48px 0 6px; padding-top: 10px; }
+  h3 { font-size: 19px; margin: 10px 0 14px; color: var(--muted); font-weight: 600; }
+  h4 { font-size: 17px; margin: 22px 0 6px; }
+  p, li { color: #2b3542; }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 40px 0 8px; }
+  blockquote {
+    margin: 22px 0; padding: 14px 18px; background: var(--accent-soft); border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+  }
+  blockquote p { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 15px; display: block; overflow-x: auto; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { background: var(--bg-soft); font-weight: 600; white-space: nowrap; }
+  code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 14px; background: var(--bg-soft); padding: 2px 5px; border-radius: 4px; }
+  pre { background: #0f1a22; color: #e6edf3; padding: 16px 18px; border-radius: 10px; overflow-x: auto; font-size: 14px; line-height: 1.55; }
+  pre code { background: none; padding: 0; color: inherit; }
+  .foot { border-top: 1px solid var(--rule); padding: 26px 0 40px; color: var(--faint); font-size: 14px; }
+  .foot .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="https://agnidas31.github.io/Agnivesh-Das/">Agnivesh Das</a>
+    <a href="https://agnidas31.github.io/Agnivesh-Das/#work">← All work</a>
+  </div>
+</div>
+<div class="wrap">
+  
+  <article><p>Case Study · US Fuels Pricing · bp</p>
+<h1>The Fuel Margin Waterfall</h1>
+<p>How a single cents-per-gallon margin number was broken into the drivers behind it, so pricing and supply teams could see not just <em>what</em> the margin was, but <em>why</em>.</p>
+<p>Agnivesh Das · Data Analyst · bp</p>
+<blockquote>
+<p><strong>Note:</strong> the structure and margin components reflect how the report worked. All values, volumes and examples are illustrative, not real production figures.</p>
+</blockquote>
+<hr />
+<h2>My Role</h2>
+<p>As Data Analyst, I owned the data behind the report end to end:</p>
+<ul>
+<li><strong>Data preparation.</strong> Brought together pricing, supply cost, invoice and volume data from multiple source systems.</li>
+<li><strong>Cleaning and transformation.</strong> Aligned everything to a common grain (site × day × fuel grade), volume-weighted every component, and built the logic that splits total margin into its drivers.</li>
+<li><strong>Reporting.</strong> Built the Tableau waterfall views: monthly, year-to-date, and year-on-year, with filters from channel of trade down to individual site and grade.</li>
+</ul>
+<hr />
+<h2>The Problem</h2>
+<h3>A margin number with no story behind it</h3>
+<p>Fuel margin is reported in <strong>cents per gallon (CPG)</strong>, and small moves matter: one cent across hundreds of millions of gallons is millions of dollars.</p>
+<p>But a single margin figure hides everything that drives it. When margin fell, the business couldn't quickly tell whether it was because:</p>
+<ul>
+<li>the market moved,</li>
+<li>the brand premium changed,</li>
+<li>supply terms got worse,</li>
+<li>volume came in differently from what was invoiced,</li>
+<li>or environmental and logistics costs shifted.</li>
+</ul>
+<p>Each of those has a different owner and a different fix. Without the breakdown, every margin conversation started with "let's go and find out why."</p>
+<hr />
+<h2>The Constraint Nobody Was Naming</h2>
+<h3>Every driver lived in a different system, at a different grain</h3>
+<p>Breaking margin into drivers wasn't a reporting problem. It was a data problem:</p>
+<p><strong>1. Different sources, different grains.</strong> Market reference prices are published daily by terminal. Invoices are per delivery. Volumes are per site per day. Terms are per contract. None of them lined up naturally.</p>
+<p><strong>2. Averages lie.</strong> A simple average of CPG across sites gives a small site the same weight as a large one. Every component had to be <strong>volume-weighted</strong>, or the parts wouldn't add up to the whole.</p>
+<p><strong>3. The pieces have to reconcile.</strong> A waterfall only works if the bars sum exactly to the total. Any gap between the components and the reported margin would destroy trust in the whole report.</p>
+<hr />
+<h2>The Fix</h2>
+<h3>One dataset, one grain, every driver as its own bar</h3>
+<p>The report decomposes margin into three layers:</p>
+<p><strong>Standard Margin</strong> (what the retail network earns on the fuel itself)</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>What it captures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Market (OPIS low) margin</strong></td>
+<td>Retail price vs. the lowest published rack price in the market: the "baseline" margin anyone could earn</td>
+</tr>
+<tr>
+<td><strong>Brand value</strong></td>
+<td>The extra price the bp brand commands at the pump</td>
+</tr>
+<tr>
+<td><strong>bp premium</strong></td>
+<td>The extra cost of buying branded supply above the market low (a negative bar)</td>
+</tr>
+<tr>
+<td><strong>Terms impact</strong></td>
+<td>The cost of payment and contract terms</td>
+</tr>
+<tr>
+<td><strong>Invoice volume variance</strong></td>
+<td>Differences between invoiced and actual delivered volume</td>
+</tr>
+<tr>
+<td><strong>Others</strong></td>
+<td>Smaller adjustments</td>
+</tr>
+<tr>
+<td><strong>= Standard margin</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Integrated Margin</strong> (value added by bp's own supply chain)
+Adds variable logistics and supply &amp; trading contributions on top of standard margin.</p>
+<p><strong>Environment</strong> (regulatory and environmental effects)
+Lag effects, renewable fuel credits (RINs), and line-space and programme costs.</p>
+<h3>How it works</h3>
+<ol>
+<li><strong>Ingest:</strong> Market reference prices, retail prices, supply invoices, contract terms and delivered volumes.</li>
+<li><strong>Align:</strong> Map everything to site × day × grade, with site attributes (region, channel of trade, brand) attached.</li>
+<li><strong>Weight:</strong> Convert every component into volume-weighted CPG.</li>
+<li><strong>Decompose:</strong> Calculate each driver so the components sum exactly to standard, integrated and total margin.</li>
+<li><strong>Reconcile:</strong> Check component totals against the finance margin figure every refresh.</li>
+<li><strong>Report:</strong> Waterfall views monthly, YTD and year-on-year, filterable from region down to site and grade.</li>
+</ol>
+<hr />
+<h2>Worked Example</h2>
+<h3>What a monthly waterfall actually shows</h3>
+<blockquote>
+<p><strong>Illustrative values only.</strong></p>
+</blockquote>
+<p>Network view for one month, 500 million gallons:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>CPG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Market (OPIS low) margin</td>
+<td>+7.0</td>
+</tr>
+<tr>
+<td>Brand value</td>
+<td>+10.0</td>
+</tr>
+<tr>
+<td>bp premium</td>
+<td>−8.5</td>
+</tr>
+<tr>
+<td>Terms impact</td>
+<td>−1.2</td>
+</tr>
+<tr>
+<td>Invoice volume variance</td>
+<td>+1.3</td>
+</tr>
+<tr>
+<td>Others</td>
+<td>−0.1</td>
+</tr>
+<tr>
+<td><strong>Standard margin</strong></td>
+<td><strong>8.5</strong></td>
+</tr>
+</tbody>
+</table>
+<pre><code>8.5 cpg × 500,000,000 gallons = $42.5 million standard margin
+</code></pre>
+<p>Now suppose next month standard margin falls to 7.5 CPG. A single number says "margin is down a cent: about $5 million." The waterfall says <em>which bar moved</em>. If brand value held but the bp premium widened, the conversation goes to supply, not to the pricing team.</p>
+<hr />
+<h2>Why This Beat The Old Approach</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Before</th>
+<th>With the margin waterfall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What you see</td>
+<td>One margin number</td>
+<td>Every driver as its own bar</td>
+</tr>
+<tr>
+<td>Explaining a change</td>
+<td>Manual investigation across systems</td>
+<td>Read straight off the chart</td>
+</tr>
+<tr>
+<td>Weighting</td>
+<td>Inconsistent averages</td>
+<td>Volume-weighted CPG throughout</td>
+</tr>
+<tr>
+<td>Trust</td>
+<td>Components didn't always tie to finance</td>
+<td>Components reconcile to the total</td>
+</tr>
+<tr>
+<td>Comparisons</td>
+<td>Ad hoc</td>
+<td>Monthly, YTD and year-on-year built in</td>
+</tr>
+<tr>
+<td>Drill-down</td>
+<td>Network level</td>
+<td>Region, channel, brand, site and grade</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Impact</h2>
+<p><strong>2× faster root-cause analysis:</strong> margin moves explained straight from the chart, which also sharpened supply decisions.</p>
+<p><strong>One view, three layers:</strong> standard, integrated and environmental margin in one place.</p>
+<p><strong>Every cent explained:</strong> each change in margin traced to a specific driver and owner.</p>
+<p><strong>From network to site:</strong> the same breakdown at every level, for every fuel grade.</p>
+<p>The real shift was changing the question from "what was our margin?" to "what moved our margin, and who owns it?"</p>
+<h2>---</h2>
+<h1>Technical Deep Dive: How the Waterfall Is Built</h1>
+<h2>1. Source data</h2>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Grain</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Market reference prices (e.g. OPIS rack)</td>
+<td>Terminal × day × grade</td>
+<td>Baseline cost</td>
+</tr>
+<tr>
+<td>Retail pump prices</td>
+<td>Site × day × grade</td>
+<td>Revenue per gallon</td>
+</tr>
+<tr>
+<td>Supply invoices</td>
+<td>Delivery</td>
+<td>Actual cost, invoiced volume</td>
+</tr>
+<tr>
+<td>Contract terms</td>
+<td>Contract / site</td>
+<td>Terms impact</td>
+</tr>
+<tr>
+<td>Delivered / sold volumes</td>
+<td>Site × day × grade</td>
+<td>Weighting, volume variance</td>
+</tr>
+<tr>
+<td>Site master</td>
+<td>Site</td>
+<td>Region, channel of trade, brand, terminal mapping</td>
+</tr>
+</tbody>
+</table>
+<h2>2. Align to one grain</h2>
+<p>Every input is mapped to <strong>site × day × grade</strong>:</p>
+<ul>
+<li>Each site is mapped to its supplying terminal, so it gets the right market reference price.</li>
+<li>Invoices are allocated to delivery dates and grades.</li>
+<li>Missing prices are carried forward from the last valid day, and flagged.</li>
+</ul>
+<h2>3. Volume-weight every component</h2>
+<p>Each component is stored as <strong>dollars</strong>, not CPG, and converted to CPG only at report time:</p>
+<pre><code class="language-sql">SELECT region,
+       month,
+       SUM(market_margin_usd)   / SUM(gallons) * 100 AS market_margin_cpg,
+       SUM(brand_value_usd)     / SUM(gallons) * 100 AS brand_value_cpg,
+       SUM(bp_premium_usd)      / SUM(gallons) * 100 AS bp_premium_cpg,
+       SUM(terms_usd)           / SUM(gallons) * 100 AS terms_cpg,
+       SUM(volume_variance_usd) / SUM(gallons) * 100 AS volume_variance_cpg,
+       SUM(other_usd)           / SUM(gallons) * 100 AS other_cpg,
+       SUM(standard_margin_usd) / SUM(gallons) * 100 AS standard_margin_cpg
+FROM   margin_components_daily
+GROUP  BY region, month;
+</code></pre>
+<p>Storing dollars and dividing by total gallons at the last step means the components <strong>always sum to the total</strong> at any level of aggregation. Averaging CPG directly would break that.</p>
+<h2>4. Decompose (illustrative logic)</h2>
+<p>Per site × day × grade:</p>
+<pre><code>market_margin   = (retail_price − market_low_price)        × gallons
+brand_value     = (brand_reference − market_reference)     × gallons
+bp_premium      = −(branded_cost − market_low_price)       × gallons
+terms_impact    = −(terms cost per gallon)                 × gallons
+volume_variance = (delivered_gallons − invoiced_gallons)   × unit_cost
+others          = standard_margin − SUM(all components above)
+</code></pre>
+<p>The "others" bar absorbs rounding and small items. It's monitored: if it grows, something upstream has broken.</p>
+<h2>5. Reconcile</h2>
+<p>Each refresh:</p>
+<ul>
+<li>Total standard margin is compared with the finance figure for the same period.</li>
+<li>The "others" bar is checked against a tolerance.</li>
+<li>Volumes are reconciled to reported sales gallons.</li>
+</ul>
+<h2>6. Report</h2>
+<p>Tableau workbook with five views:</p>
+<ol>
+<li>All margin components (monthly)</li>
+<li>All margin (YTD)</li>
+<li>Standard margin (YTD, this year vs last year)</li>
+<li>Environment (YTD)</li>
+<li>Integrated margin (YTD)</li>
+</ol>
+<p>Filters: year, month, channel of trade, branded price type, region, footprint, state, terminal, product type and grade.</p>
+<hr />
+<p>Created by Agnivesh Das · bp US Fuels · Illustrative values throughout. CPG = cents per gallon. OPIS = Oil Price Information Service (market price benchmark). RINs = Renewable Identification Numbers.</p></article>
+</div>
+<div class="foot">
+  <div class="wrap">
+    <span>Agnivesh Das · <a href="https://agnidas31.github.io/Agnivesh-Das/">Portfolio</a> · <a href="https://www.linkedin.com/in/agnivesh-das/">LinkedIn</a></span>
+    <span>Illustrative figures; confidential details omitted.</span>
+  </div>
+</div>
+</body>
+</html>

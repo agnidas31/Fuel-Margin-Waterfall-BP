@@ -4,15 +4,15 @@ Field-Tested Innovation · US Fuels Pricing · bp
 
 How a single cents-per-gallon margin number was broken into the drivers behind it, so pricing and supply teams could see not just *what* the margin was, but *why*.
 
-Agnivesh Das · Senior Data Analytics Engineer · bp
+Agnivesh Das · Data Analyst · bp
 
-> **Note:** the structure and margin components reflect how the report worked. All values, volumes and examples are illustrative, not real production figures. Items marked *[Confirm]* are my reading of the dashboard labels and need your check.
+> **Note:** the structure and margin components reflect how the report worked. All values, volumes and examples are illustrative, not real production figures.
 
 ---
 
 ## My Role
 
-As Senior Data Analytics Engineer, I owned the data behind the report end to end:
+As Data Analyst, I owned the data behind the report end to end:
 
 - **Data preparation.** Brought together pricing, supply cost, invoice and volume data from multiple source systems.
 - **Cleaning and transformation.** Aligned everything to a common grain (site × day × fuel grade), volume-weighted every component, and built the logic that splits total margin into its drivers.
@@ -60,7 +60,7 @@ The report decomposes margin into three layers:
 
 **Standard Margin** (what the retail network earns on the fuel itself)
 
-| Component | What it captures *[Confirm]* |
+| Component | What it captures |
 | --------- | ---------------------------- |
 | **Market (OPIS low) margin** | Retail price vs. the lowest published rack price in the market: the "baseline" margin anyone could earn |
 | **Brand value** | The extra price the bp brand commands at the pump |
@@ -71,10 +71,10 @@ The report decomposes margin into three layers:
 | **= Standard margin** | |
 
 **Integrated Margin** (value added by bp's own supply chain)
-Adds variable logistics and supply & trading contributions on top of standard margin. *[Confirm]*
+Adds variable logistics and supply & trading contributions on top of standard margin.
 
 **Environment** (regulatory and environmental effects)
-Lag effects, renewable fuel credits (RINs), and line-space and programme costs. *[Confirm]*
+Lag effects, renewable fuel credits (RINs), and line-space and programme costs.
 
 ### How it works
 
@@ -127,6 +127,8 @@ Now suppose next month standard margin falls to 7.5 CPG. A single number says "m
 ---
 
 ## Impact
+
+**2× faster root-cause analysis:** margin moves explained straight from the chart, which also sharpened supply decisions.
 
 **One view, three layers:** standard, integrated and environmental margin in one place.
 
