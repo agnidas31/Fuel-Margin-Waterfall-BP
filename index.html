@@ -3,106 +3,111 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fuel Margin Waterfall · Agnivesh Das</title>
-<meta name="description" content="One cents-per-gallon margin number broken into the drivers behind it, so pricing and supply teams could see not just what the margin was, but why.">
-<meta property="og:title" content="Fuel Margin Waterfall · Agnivesh Das">
-<meta property="og:description" content="One cents-per-gallon margin number broken into the drivers behind it, so pricing and supply teams could see not just what the margin was, but why.">
+<title>From One Margin Number to Every Cent Explained · Agnivesh Das</title>
+<meta name="description" content="Fuel margin is reported in cents per gallon, and one cent across hundreds of millions of gallons is millions of dollars. But a single number hides everything behind it. The Fuel Margin Waterfall broke it into the drivers that move it, so pricing and supply teams could see not just what the margin was, but why.">
+<meta property="og:title" content="From One Margin Number to Every Cent Explained · Agnivesh Das">
+<meta property="og:description" content="Fuel margin is reported in cents per gallon, and one cent across hundreds of millions of gallons is millions of dollars. But a single number hides everything behind it. The Fuel Margin Waterfall broke it into the drivers that move it, so pricing and supply teams could see not just what the margin was, but why.">
 <meta name="theme-color" content="#0b0f14">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  /* Project-page identity: graphite + mint + amber. Deliberately distinct from the hub's navy/copper. */
   :root {
-    --night: #0b0f14; --night-2: #121821; --night-line: rgba(255,255,255,.1);
-    --paper: #f5f3ee; --card: #ffffff; --ink: #141a21; --muted: #5c6570; --faint: #8d959f; --rule: #e2dfd6;
-    --mint: #5eead4; --em: #00866b; --em-ink: #006b56; --amber: #c97a00; --amber-hi: #ffb547; --violet: #5b4fd6;
+    --night: #0b0f14; --night-line: rgba(255,255,255,.1);
+    --paper: #f7f6f2; --card: #ffffff; --ink: #141a21; --text: #2c343d; --muted: #5c6570; --faint: #8d959f; --rule: #e2dfd6;
+    --mint: #5eead4; --em: #00866b; --em-ink: #006b56; --amber: #c97a00; --amber-hi: #ffb547;
     --ok: #1d7a4f; --warn: #a15c00; --no: #a8322d;
     --display: "Space Grotesk", "Manrope", system-ui, sans-serif;
     --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
     --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-    --radius: 16px; --max: 1180px;
+    --col: 760px; --wide: 920px;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
   html, body { overflow-x: hidden; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.62 var(--body); -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: var(--paper); color: var(--text); font: 17.5px/1.72 var(--body); -webkit-font-smoothing: antialiased; }
   a { color: var(--em); }
   ::selection { background: var(--mint); color: var(--night); }
-  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
-  h1, h2, h3 { font-family: var(--display); letter-spacing: -.02em; }
-  .mono { font-family: var(--mono); }
+  h1, h2, h3 { font-family: var(--display); letter-spacing: -.02em; color: var(--ink); }
+  .column { max-width: var(--col); margin: 0 auto; padding: 0 22px; }
+  .widecol { max-width: var(--wide); margin: 0 auto; padding: 0 22px; }
 
-  /* ---------- nav ---------- */
   #progress { position: fixed; top: 0; left: 0; height: 2px; width: 0; z-index: 40; background: linear-gradient(90deg, var(--mint), var(--amber-hi)); }
-  .nav { position: sticky; top: 0; z-index: 30; background: rgba(11,15,20,.78); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--night-line); }
-  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
-  .brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font: 600 15px var(--display); white-space: nowrap; }
-  .brand i { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; font: 700 12px var(--mono); font-style: normal; color: var(--night); background: linear-gradient(135deg, var(--mint), #a7f3d0); }
-  .nav ul { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; align-items: center; }
-  .nav ul a { color: #a9b3bd; text-decoration: none; font: 500 12.5px var(--mono); letter-spacing: .3px; padding: 6px 10px; border-radius: 8px; transition: color .2s, background .2s; }
-  .nav ul a:hover, .nav ul a.on { color: #fff; background: rgba(255,255,255,.07); }
-  .nav ul a.on { color: var(--mint); }
-  .nav .back { border: 1px solid rgba(94,234,212,.4); color: var(--mint) !important; }
+  .top { position: absolute; top: 0; left: 0; right: 0; z-index: 5; }
+  .top .widecol { display: flex; justify-content: space-between; align-items: center; height: 64px; }
+  .top a { color: #a9b3bd; text-decoration: none; font: 500 13px var(--mono); }
+  .top a:hover { color: var(--mint); }
+  .top .brand { color: #fff; font: 600 15px var(--display); display: flex; gap: 10px; align-items: center; }
+  .top .brand i { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; font: 700 11px var(--mono); font-style: normal; color: var(--night); background: linear-gradient(135deg, var(--mint), #a7f3d0); }
 
-  /* ---------- hero ---------- */
-  .hero { position: relative; background: var(--night); color: #fff; overflow: hidden; isolation: isolate; }
+  /* opening */
+  .hero { position: relative; background: var(--night); color: #fff; overflow: hidden; isolation: isolate; padding: 130px 0 70px; }
   .hero::before { content: ""; position: absolute; inset: 0; z-index: -2;
-    background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
-    background-size: 44px 44px; mask-image: radial-gradient(ellipse 80% 70% at 60% 40%, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse 80% 70% at 60% 40%, #000 30%, transparent 75%); }
-  .hero::after { content: ""; position: absolute; inset: -20% -10% auto auto; width: 70%; height: 120%; z-index: -1;
-    background: radial-gradient(closest-side, rgba(94,234,212,.20), transparent), radial-gradient(closest-side at 20% 80%, rgba(255,181,71,.12), transparent); filter: blur(10px); }
-  .hero .wrap { display: grid; grid-template-columns: 1.08fr .92fr; gap: 40px; align-items: center; padding-top: 70px; padding-bottom: 40px; }
-  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font: 600 12px var(--mono); letter-spacing: 1.2px; text-transform: uppercase; color: var(--mint); padding: 6px 12px; border: 1px solid rgba(94,234,212,.28); border-radius: 99px; background: rgba(94,234,212,.06); }
-  .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 4px rgba(94,234,212,.18); animation: blink 2.4s infinite; }
-  .hero h1 { font-size: clamp(42px, 6.4vw, 76px); line-height: .98; margin: 22px 0 18px; font-weight: 700;
-    background: linear-gradient(180deg, #fff 30%, #b9c7c4); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .hook { font-size: clamp(17px, 1.9vw, 20px); color: #c4ccd3; margin: 0 0 24px; max-width: 600px; }
-  .byline { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 14px; color: #93a0aa; }
+    background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 44px 44px; -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 25%, transparent 75%); mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 25%, transparent 75%); }
+  .hero::after { content: ""; position: absolute; top: -30%; left: 30%; width: 70%; height: 120%; z-index: -1; background: radial-gradient(closest-side, rgba(94,234,212,.16), transparent); }
+  .eyebrow { font: 600 12px var(--mono); letter-spacing: 1.3px; text-transform: uppercase; color: var(--mint); }
+  .hero h1 { color: #fff; font-size: clamp(38px, 6vw, 64px); line-height: 1.02; margin: 16px 0 22px; font-weight: 700; }
+  .intro { font-size: clamp(18px, 2vw, 21px); line-height: 1.6; color: #c9d1d8; margin: 0 0 26px; }
+  .byline { font-size: 14.5px; color: #93a0aa; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
   .byline b { color: #fff; font-weight: 600; }
   .byline .sep { width: 4px; height: 4px; border-radius: 50%; background: #4a5560; }
-  .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
-  .stack span { font: 500 12px var(--mono); color: #cfd6dc; background: rgba(255,255,255,.05); border: 1px solid var(--night-line); padding: 4px 10px; border-radius: 6px; }
-  .art-frame { position: relative; border: 1px solid var(--night-line); border-radius: 22px; background: linear-gradient(160deg, rgba(255,255,255,.05), rgba(255,255,255,.01)); padding: 10px; }
-  .art-frame::before, .art-frame::after { content: ""; position: absolute; width: 18px; height: 18px; border: 2px solid var(--mint); }
-  .art-frame::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; border-radius: 22px 0 0 0; }
-  .art-frame::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; border-radius: 0 0 22px 0; }
-  .art-frame .cap { position: absolute; top: 14px; right: 16px; font: 600 10.5px var(--mono); letter-spacing: 1px; color: #6f7d88; text-transform: uppercase; }
-  .art { display: block; width: 100%; height: auto; }
-  .results { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--night-line); border-radius: var(--radius); background: rgba(255,255,255,.025); margin-top: 18px; }
-  .results div { padding: 20px 24px; position: relative; }
-  .results div + div { border-left: 1px solid var(--night-line); }
-  .results b { display: block; font: 700 clamp(34px, 4vw, 46px)/1 var(--display); letter-spacing: -.03em; background: linear-gradient(90deg, var(--mint), #c4fff4); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .results span { display: block; color: #a9b3bd; font-size: 14px; margin-top: 8px; }
-  .results-note { grid-column: 1 / -1; font: 500 11.5px var(--mono); color: #66737e; letter-spacing: .3px; margin-top: -24px; }
+  .note { margin-top: 34px; border: 1px solid rgba(255,181,71,.35); background: rgba(255,181,71,.07); border-radius: 12px; padding: 14px 18px; font-size: 14.5px; line-height: 1.6; color: #e6dccb; }
+  .note b { color: var(--amber-hi); font: 600 12px var(--mono); letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 4px; }
 
-  .ticker { background: var(--amber-hi); color: #2b1a00; overflow: hidden; white-space: nowrap; font: 600 12px var(--mono); letter-spacing: .8px; text-transform: uppercase; }
-  .ticker div { display: inline-block; padding: 9px 0; animation: marquee 38s linear infinite; }
-  .ticker span { margin: 0 22px; }
-  .ticker span::before { content: "◆"; margin-right: 22px; opacity: .55; }
+  /* the project */
+  main { padding: 80px 0 30px; }
+  .label { font: 600 12px var(--mono); letter-spacing: 1.3px; text-transform: uppercase; color: var(--em); margin: 0 0 10px; display: flex; align-items: center; gap: 10px; }
+  .label::after { content: ""; width: 40px; height: 1px; background: currentColor; opacity: .5; }
+  h2 { font-size: clamp(28px, 3.6vw, 40px); line-height: 1.1; margin: 0 0 18px; }
+  .lede { font-size: 19px; color: var(--ink); }
+  h3 { font-size: clamp(22px, 2.6vw, 27px); line-height: 1.2; margin: 64px 0 12px; padding-top: 26px; border-top: 1px solid var(--rule); position: relative; }
+  h3::before { content: attr(data-n); position: absolute; top: -11px; left: 0; background: var(--paper); padding-right: 10px; font: 600 12px var(--mono); color: var(--amber); letter-spacing: 1px; }
+  p { margin: 0 0 18px; }
+  em { color: var(--ink); font-style: normal; font-weight: 600; }
+  figure { margin: 26px 0 26px; }
+  .fig { background: var(--card); border: 1px solid var(--rule); border-radius: 16px; padding: 22px 24px 20px; box-shadow: 0 14px 36px -24px rgba(20,26,33,.25); }
+  figcaption { display: flex; flex-direction: column; gap: 4px; margin-bottom: 18px; }
+  figcaption b { font: 600 17px var(--display); color: var(--ink); letter-spacing: -.01em; }
+  figcaption > span { font: 500 12px var(--mono); color: var(--faint); }
+  .fig .ill { display: inline-block; vertical-align: 3px; margin-left: 6px; font: 600 10.5px var(--mono); letter-spacing: 1px; text-transform: uppercase; color: var(--amber); background: #fff4e2; border-radius: 5px; padding: 2px 7px; margin-top: 4px; }
+  .callouts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 22px 0; }
+  .callout { border-left: 3px solid var(--em); background: #eef5f2; border-radius: 0 12px 12px 0; padding: 16px 18px; font-size: 15.5px; line-height: 1.6; }
+  .callout b { display: block; font: 600 16px var(--display); color: var(--ink); margin-bottom: 6px; }
 
-  /* ---------- sections ---------- */
-  section { padding: 96px 0; position: relative; }
-  .sec-head { display: grid; grid-template-columns: auto 1fr; gap: 0 28px; align-items: end; margin-bottom: 40px; }
-  .num { font: 700 clamp(72px, 10vw, 128px)/.8 var(--display); color: transparent; -webkit-text-stroke: 1.5px #c9c4b6; letter-spacing: -.05em; grid-row: span 3; align-self: start; }
-  .kicker { font: 600 12px var(--mono); letter-spacing: 1.4px; text-transform: uppercase; color: var(--em); margin: 0 0 10px; display: flex; align-items: center; gap: 10px; }
-  .kicker::after { content: ""; width: 48px; height: 1px; background: currentColor; opacity: .5; }
-  h2 { font-size: clamp(28px, 3.8vw, 44px); line-height: 1.06; margin: 0 0 12px; font-weight: 700; color: var(--ink); }
-  .sub { color: var(--muted); margin: 0; max-width: 720px; font-size: 17px; }
-  .card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 24px; box-shadow: 0 1px 0 rgba(20,26,33,.02), 0 12px 32px -18px rgba(20,26,33,.18); }
-  .card h3 { margin: 0 0 4px; font-size: 18px; font-weight: 600; }
-  .card .csub { color: var(--muted); font-size: 13.5px; margin: 0 0 18px; }
-  .fig { font: 600 11px var(--mono); letter-spacing: 1.2px; text-transform: uppercase; color: var(--faint); margin: 0 0 16px; display: flex; justify-content: space-between; gap: 12px; }
-  .fig em { font-style: normal; color: var(--amber); }
+  /* results + why */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 22px 0 0; }
+  .tile { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 20px 18px; }
+  .tile b { display: block; font: 700 clamp(30px, 3.4vw, 40px)/1 var(--display); letter-spacing: -.03em; color: var(--em); }
+  .tile span { display: block; font-size: 14px; line-height: 1.45; color: var(--muted); margin-top: 10px; }
+  .results { margin-top: 70px; }
+  .results .tiles .tile { border-top: 3px solid var(--em); }
+  .why { background: var(--night); color: #c9d1d8; padding: 80px 0; margin-top: 80px; }
+  .why .label { color: var(--mint); }
+  .why h2 { color: #fff; }
+  .why p:not(.label) { font-size: 18.5px; }
+  .why .tile { background: rgba(255,255,255,.03); border-color: var(--night-line); }
+  .why .tile b { color: var(--mint); }
+  .why .tile span { color: #93a0aa; }
 
-  /* 01 problem */
-  .prob { display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px; align-items: start; }
-  .points { display: grid; gap: 12px; counter-reset: p; }
-  .point { position: relative; background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 18px 18px 18px 64px; transition: transform .25s, box-shadow .25s, border-color .25s; }
-  .point:hover { transform: translateY(-2px); border-color: #d8b27a; box-shadow: 0 14px 30px -20px rgba(201,122,0,.6); }
-  .point::before { counter-increment: p; content: "0" counter(p); position: absolute; left: 18px; top: 18px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; background: #fff4e2; color: var(--amber); font: 700 12px var(--mono); }
-  .point b { display: block; font-family: var(--display); font-weight: 600; font-size: 16.5px; margin-bottom: 3px; }
-  .point p { margin: 0; color: var(--muted); font-size: 14.5px; }
+  .foot { background: var(--night); border-top: 1px solid var(--night-line); padding: 24px 0 34px; font: 500 12.5px var(--mono); color: #6f7d88; }
+  .foot .widecol { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+  .foot a { color: #a9b3bd; }
+
+  .formula { background: #f2f7f5; border: 1px solid #d3e6df; border-left: 4px solid var(--em); border-radius: 10px; padding: 14px 18px; font: 500 14.5px/1.7 var(--mono); color: #23302c; }
+  .formula b { color: var(--em-ink); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips span { background: #eef6f3; color: var(--em-ink); border: 1px solid #cfe5dd; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .pair > * { min-width: 0; }
+  .pair h4 { margin: 0 0 10px; font: 600 11px var(--mono); letter-spacing: 1px; text-transform: uppercase; color: var(--faint); }
+  .bignum { display: grid; grid-template-columns: auto 1fr; gap: 22px; align-items: center; }
+  .bignum .n { background: var(--night); color: #fff; border-radius: 14px; padding: 20px 24px; font: 700 56px/1 var(--display); letter-spacing: -.03em; }
+  .bignum .n small { display: block; font: 600 11px var(--mono); color: #8a96a1; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .bignum .n span { font-size: 20px; color: #9aa6b0; }
+  .bignum .n em { display: block; font: 600 13px var(--mono); color: var(--amber-hi); margin-top: 14px; }
+  .bignum ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+  .bignum li { border: 1px dashed #cfc9bb; border-radius: 9px; padding: 6px 12px; font-size: 14.5px; color: var(--muted); }
+  .bignum li:first-child { border: 0; padding: 0 0 2px; font: 600 17px var(--display); color: var(--ink); }
   .srcs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .src { border: 1px solid var(--rule); border-radius: 12px; padding: 14px; background: linear-gradient(180deg, #fbfaf7, #fff); position: relative; overflow: hidden; }
   .src::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, var(--em), var(--mint)); }
@@ -114,38 +119,6 @@
   .src dd { margin: 0; font-size: 14px; }
   .nokey { margin-top: 12px; display: flex; align-items: center; gap: 12px; border: 1.5px dashed #e2b56f; border-radius: 12px; padding: 11px 14px; color: #7a4a00; font-weight: 600; font-size: 14.5px; background: repeating-linear-gradient(-45deg, #fffaf1 0 8px, #fff5e4 8px 16px); }
   .nokey span { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--amber); color: #fff; font-size: 12px; flex: none; }
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .pair h4 { margin: 0 0 10px; font: 600 11px var(--mono); letter-spacing: 1px; text-transform: uppercase; color: var(--faint); }
-  .onenum { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .onenum .big { background: var(--night); color: #fff; border-radius: 14px; padding: 20px; font: 700 60px/1 var(--display); letter-spacing: -.03em; position: relative; overflow: hidden; }
-  .onenum .big::after { content: ""; position: absolute; right: -40px; bottom: -40px; width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,181,71,.35), transparent); }
-  .onenum .big small { display: block; font: 600 11px var(--mono); color: #8a96a1; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
-  .onenum .big span { font-size: 20px; color: #9aa6b0; }
-  .onenum .big em { display: block; font: 600 13.5px var(--mono); color: var(--amber-hi); margin-top: 16px; font-style: normal; }
-  .onenum .why { display: flex; flex-direction: column; gap: 7px; }
-  .onenum .why b { font-family: var(--display); font-size: 18px; }
-  .onenum .why span { border: 1px dashed #cfc9bb; border-radius: 9px; padding: 6px 12px; font-size: 14px; color: var(--muted); background: #fff; }
-
-  /* 02 approach: pipeline */
-  section.dark { background: var(--night); color: #fff; }
-  section.dark h2 { color: #fff; }
-  section.dark .sub { color: #a9b3bd; }
-  section.dark .num { -webkit-text-stroke-color: #2c3742; }
-  section.dark .kicker { color: var(--mint); }
-  .pipe { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 26px; }
-  .pipe::before { content: ""; position: absolute; left: 4%; right: 4%; top: 22px; height: 2px; background: linear-gradient(90deg, rgba(94,234,212,.15), var(--mint), rgba(255,181,71,.8)); }
-  .pipe::after { content: ""; position: absolute; top: 18px; left: 4%; width: 10px; height: 10px; border-radius: 50%; background: #fff; box-shadow: 0 0 12px 4px rgba(94,234,212,.7); animation: travel 5s ease-in-out infinite; }
-  .stage { position: relative; padding-top: 58px; }
-  .stage .dot { position: absolute; top: 4px; left: 0; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--night-2); border: 1px solid rgba(94,234,212,.45); color: var(--mint); font: 700 13px var(--mono); }
-  .stage b { display: block; font: 600 17px var(--display); margin-bottom: 6px; }
-  .stage p { margin: 0; color: #a3aeb8; font-size: 14px; line-height: 1.55; }
-  .extra { background: var(--card); color: var(--ink); border-radius: var(--radius); padding: 26px; border: 1px solid rgba(255,255,255,.08); }
-  .extra h3 { margin: 0 0 18px; font-size: 19px; }
-  .formula { background: #f2f7f5; border: 1px solid #d3e6df; border-left: 4px solid var(--em); border-radius: 10px; padding: 14px 18px; font: 500 14.5px var(--mono); margin-bottom: 16px; color: #23302c; }
-  .formula div { padding: 3px 0; }
-  .formula b { color: var(--em-ink); }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chips span { background: #eef6f3; color: var(--em-ink); border: 1px solid #cfe5dd; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; }
   .tbl { overflow-x: auto; }
   .tbl table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
   .tbl th, .tbl td { text-align: left; padding: 10px; border-bottom: 1px solid var(--rule); }
@@ -153,41 +126,6 @@
   .tbl td:first-child { font-family: var(--mono); font-size: 13.5px; white-space: nowrap; }
   .st { font-weight: 700; font-size: 13px; white-space: nowrap; padding: 3px 9px; border-radius: 99px; }
   .st.ok { color: var(--ok); background: #e7f5ee; } .st.warn { color: var(--warn); background: #fff2dc; } .st.no { color: var(--no); background: #fbe9e8; }
-
-  /* 03 contribution */
-  .contrib { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  .ccard { position: relative; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 26px 24px 24px; overflow: hidden; transition: transform .3s, box-shadow .3s; }
-  .ccard:hover { transform: translateY(-4px); box-shadow: 0 24px 40px -26px rgba(0,134,107,.55); }
-  .ccard::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: linear-gradient(90deg, var(--em), var(--mint), var(--amber-hi)); }
-  .ccard .idx { position: absolute; right: 18px; top: 16px; font: 700 40px/1 var(--display); color: #efebe1; letter-spacing: -.04em; z-index: 0; }
-  .ccard > * { position: relative; z-index: 1; }
-  .ccard .lab { font: 600 11px var(--mono); letter-spacing: 1.2px; text-transform: uppercase; color: var(--em); }
-  .ccard h3 { margin: 8px 0 10px; font-size: 21px; padding-right: 52px; }
-  .ccard p { color: var(--muted); font-size: 15px; margin: 0 0 18px; }
-  .ccard .chips span { font: 500 12px var(--mono); padding: 4px 9px; background: var(--paper); color: var(--ink); border-color: var(--rule); }
-
-  /* 04 output: dashboard mock */
-  section.grid-bg { background-color: #eceae3; background-image: radial-gradient(#d6d2c6 1px, transparent 1px); background-size: 22px 22px; }
-  .dash { display: grid; grid-template-columns: 210px 1fr; border-radius: 20px; overflow: hidden; background: var(--night); box-shadow: 0 40px 80px -40px rgba(11,15,20,.55), 0 0 0 1px rgba(11,15,20,.1); }
-  .side { padding: 18px 14px; color: #9aa6b0; font-size: 13.5px; border-right: 1px solid var(--night-line); }
-  .side .lights { display: flex; gap: 6px; margin-bottom: 22px; }
-  .side .lights i { width: 10px; height: 10px; border-radius: 50%; background: #2b3540; }
-  .side .lights i:first-child { background: #ff6b5e; } .side .lights i:nth-child(2) { background: #ffbd2e; } .side .lights i:nth-child(3) { background: #28c840; }
-  .side .app { color: #fff; font: 600 14px var(--display); margin-bottom: 18px; display: flex; gap: 8px; align-items: center; }
-  .side .app::before { content: ""; width: 18px; height: 18px; border-radius: 5px; background: linear-gradient(135deg, var(--mint), var(--violet)); }
-  .side a { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; color: inherit; text-decoration: none; margin-bottom: 2px; line-height: 1.3; }
-  .side a::before { content: ""; width: 6px; height: 6px; border-radius: 2px; background: #3a4652; flex: none; }
-  .side a.on { background: rgba(94,234,212,.1); color: #fff; } .side a.on::before { background: var(--mint); }
-  .side .foot-note { margin-top: 24px; font: 500 11px var(--mono); color: #5f6c77; line-height: 1.6; }
-  .main { background: #f3f2ee; min-width: 0; }
-  .topbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--rule); background: #fff; }
-  .topbar .t { font: 600 15px var(--display); margin-right: auto; }
-  .pill { font: 500 12px var(--mono); border: 1px solid var(--rule); border-radius: 8px; padding: 5px 10px; color: var(--muted); background: var(--paper); }
-  .pill.live { color: #7a4a00; background: #fff2dc; border-color: #f2d29f; }
-  .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 16px; }
-  .panels .card { padding: 20px; border-radius: 14px; box-shadow: none; }
-  .panels .wide { grid-column: 1 / -1; }
-  .panels > *, .prob > *, .pair > *, .onenum > * { min-width: 0; }
 
   /* charts */
   .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--muted); margin: 0 0 12px; }
@@ -257,100 +195,32 @@
   .js .anim .col:nth-child(5) i, .js .anim .wf-c:nth-child(5) i, .js .anim .hb-row:nth-child(5) i { transition-delay: .28s; }
   .js .anim .col:nth-child(6) i, .js .anim .wf-c:nth-child(6) i, .js .anim .hb-row:nth-child(6) i { transition-delay: .35s; }
   .js .anim .col:nth-child(n+7) i, .js .anim .wf-c:nth-child(n+7) i, .js .anim .hb-row:nth-child(n+7) i { transition-delay: .42s; }
-  .js [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
-  .js [data-reveal].in { opacity: 1; transform: none; }
+  .src { background: #fbfaf7; }
+  /* entrance motion for charts */
+  .js .anim .hb-t i, .js .anim .db-t i { transform: scaleX(0); transition: transform .9s cubic-bezier(.2,.8,.2,1); }
+  .js .anim .col i, .js .anim .wf-c i { transform: scaleY(0); transition: transform .8s cubic-bezier(.2,.8,.2,1); }
+  .js .anim .plot svg { clip-path: inset(0 100% 0 0); transition: clip-path 1.4s cubic-bezier(.4,.1,.2,1); }
+  .js .anim .dot { opacity: 0; transition: opacity .4s .9s; }
+  .js .anim.in .hb-t i, .js .anim.in .db-t i, .js .anim.in .col i, .js .anim.in .wf-c i { transform: none; }
+  .js .anim.in .plot svg { clip-path: inset(0 0 0 0); }
+  .js .anim.in .dot { opacity: 1; }
+  .js .anim .col:nth-child(2) i, .js .anim .hb-row:nth-child(2) i { transition-delay: .08s; }
+  .js .anim .col:nth-child(3) i, .js .anim .hb-row:nth-child(3) i { transition-delay: .16s; }
+  .js .anim .col:nth-child(4) i, .js .anim .hb-row:nth-child(4) i { transition-delay: .24s; }
+  .js .anim .col:nth-child(5) i { transition-delay: .32s; }
+  .js .fade-up { opacity: 0; transform: translateY(14px); transition: opacity .7s, transform .7s cubic-bezier(.2,.8,.2,1); }
+  .js .fade-up.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } .js .fade-up { opacity: 1; transform: none; } }
 
-  /* 05 impact */
-  .impact { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--night-line); border: 1px solid var(--night-line); border-radius: var(--radius); overflow: hidden; }
-  .icard { background: var(--night); padding: 26px 22px; position: relative; }
-  .icard::before { content: ""; position: absolute; left: 22px; top: 0; width: 34px; height: 3px; background: var(--mint); border-radius: 0 0 3px 3px; }
-  .icard .m { font: 700 clamp(34px, 3.6vw, 46px)/1 var(--display); letter-spacing: -.03em; background: linear-gradient(90deg, var(--mint), #d5fff7); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .icard .l { font: 600 15.5px var(--display); margin-top: 10px; color: #fff; }
-  .icard .d { color: #9aa6b0; font-size: 14px; margin-top: 8px; line-height: 1.55; }
-  .ba { margin-top: 28px; display: grid; gap: 10px; }
-  .ba-row { display: grid; grid-template-columns: 1fr 1.25fr 40px 1.45fr; gap: 14px; align-items: center; padding: 14px 18px; border-radius: 12px; background: rgba(255,255,255,.03); border: 1px solid var(--night-line); font-size: 15px; transition: background .25s, border-color .25s; }
-  .ba-row:hover { background: rgba(94,234,212,.05); border-color: rgba(94,234,212,.25); }
-  .ba-row.head { background: none; border: 0; padding-top: 0; padding-bottom: 0; font: 600 11px var(--mono); letter-spacing: 1.2px; text-transform: uppercase; color: #66737e; }
-  .ba-row .k { font: 600 15px var(--display); color: #fff; }
-  .ba-row .b { color: #7f8b95; text-decoration: line-through; text-decoration-color: rgba(255,255,255,.25); }
-  .ba-row .ar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,181,71,.12); color: var(--amber-hi); font-weight: 700; }
-  .ba-row .a { color: #e6eef0; font-weight: 500; }
-  .closing { margin: 44px 0 0; font: 600 clamp(22px, 3vw, 34px)/1.25 var(--display); letter-spacing: -.02em; color: #fff; max-width: 900px; }
-  .closing::before { content: "“"; display: block; font-size: 80px; line-height: .6; color: var(--mint); margin-bottom: 8px; }
-
-  /* CTA + footer */
-  .more { background: linear-gradient(120deg, #0e3b33, #0b0f14 55%, #2a1c05); color: #fff; }
-  .more .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 22px; padding-top: 56px; padding-bottom: 56px; }
-  .more h2 { color: #fff; margin: 0; font-size: clamp(26px, 3vw, 34px); }
-  .more p { margin: 6px 0 0; color: #a9b3bd; }
-  .btns { display: flex; flex-wrap: wrap; gap: 10px; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 10px; font-weight: 700; font-size: 15px; text-decoration: none; border: 1px solid rgba(255,255,255,.25); color: #fff; transition: transform .2s, background .2s; }
-  .btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.06); }
-  .btn.primary { background: var(--mint); border-color: var(--mint); color: var(--night); }
-  .btn.primary:hover { background: #8ff2e2; }
-  .foot { background: var(--night); border-top: 1px solid var(--night-line); padding: 22px 0 30px; color: #6f7d88; font: 500 12px var(--mono); }
-  .foot a { color: #a9b3bd; }
-  .foot .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-
-  /* hero-art + misc animation */
-  .art .flow { stroke-dasharray: 3 11; animation: flow 1.4s linear infinite; }
-  .art .draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2s cubic-bezier(.4,.1,.2,1) forwards; }
-  .art .pulse { transform-box: fill-box; transform-origin: center; animation: pulse 2.6s ease-out infinite; }
-  .art .rise { transform-box: fill-box; transform-origin: bottom; animation: rise .9s cubic-bezier(.2,.8,.2,1) both; }
-  .art .fade { opacity: 0; animation: fade .7s ease forwards; }
-  .art .scan { animation: scan 5s ease-in-out infinite alternate; }
-  @keyframes flow { to { stroke-dashoffset: -28; } }
-  @keyframes draw { to { stroke-dashoffset: 0; } }
-  @keyframes pulse { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(1.6); opacity: 0; } }
-  @keyframes rise { from { transform: scaleY(0); } }
-  @keyframes fade { to { opacity: 1; } }
-  @keyframes scan { from { transform: translateY(0); } to { transform: translateY(260px); } }
-  @keyframes blink { 50% { box-shadow: 0 0 0 7px rgba(94,234,212,0); } }
-  @keyframes marquee { to { transform: translateX(-50%); } }
-  @keyframes travel { 0% { left: 4%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { left: 95%; opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-    .art .draw { stroke-dashoffset: 0; } .art .fade { opacity: 1; }
-    .js [data-reveal] { opacity: 1; transform: none; }
-  }
-
-  /* responsive */
-  @media (max-width: 1000px) {
-    .hero .wrap { grid-template-columns: 1fr; padding-top: 48px; }
-    .art-frame { max-width: 560px; }
-    .pipe { grid-template-columns: repeat(3, 1fr); row-gap: 28px; }
-    .pipe::before, .pipe::after { display: none; }
-    .stage { padding: 0 0 0 54px; min-height: 40px; }
-    .stage .dot { top: 0; }
-    .impact { grid-template-columns: repeat(2, 1fr); }
-    .prob { grid-template-columns: 1fr; }
-    .nav ul li.sec { display: none; }
-    .dash { grid-template-columns: 1fr; }
-    .side { display: none; }
-  }
   @media (max-width: 720px) {
-    section { padding: 64px 0; }
-    .wrap { padding: 0 16px; }
-    .sec-head { grid-template-columns: 1fr; }
-    .num { font-size: 64px; grid-row: auto; margin-bottom: 6px; }
-    .results { grid-template-columns: 1fr; }
-    .results div + div { border-left: 0; border-top: 1px solid var(--night-line); }
-    .results-note { margin-top: -28px; }
-    .contrib, .panels, .pair, .onenum, .srcs { grid-template-columns: 1fr; }
-    .pipe { grid-template-columns: 1fr 1fr; }
-    .panels { padding: 10px; gap: 10px; }
-    .panels .card { padding: 14px; }
-    .ba-row { grid-template-columns: 1fr; gap: 4px; }
-    .ba-row.head, .ba-row .ar { display: none; }
-    .ba-row .b::before { content: "Before · "; font: 600 11px var(--mono); text-decoration: none; display: inline-block; }
-    .ba-row .a::before { content: "After · "; color: var(--mint); font: 600 11px var(--mono); }
-    .nav ul li.cs { display: none; }
+    body { font-size: 16.5px; }
+    .hero { padding: 100px 0 54px; }
+    main { padding-top: 56px; }
+    .tiles { grid-template-columns: 1fr 1fr; }
+    .callouts, .srcs, .pair, .bignum { grid-template-columns: 1fr; }
+    .fig { padding: 16px; }
     .sx-in { min-width: calc(var(--n) * 74px); padding-bottom: 4px; }
-    .topbar .pill:not(.live) { display: none; }
-  }
-  @media (max-width: 440px) {
-    .impact, .pipe { grid-template-columns: 1fr; }
-    .hb-row, .db-row { grid-template-columns: 34% 1fr auto; gap: 8px; font-size: 13px; }
+    .top .back-full { display: none; }
   }
 </style>
 </head>
@@ -358,223 +228,156 @@
 <script>document.documentElement.classList.add('js');</script>
 <div id="progress"></div>
 <div id="tip" role="status"></div>
-<nav class="nav">
-  <div class="wrap">
-    <a class="brand" href="https://agnidas31.github.io/Agnivesh-Das/"><i>AD</i>Agnivesh Das</a>
-    <ul>
-      <li class="sec"><a href="#problem">01 Problem</a></li>
-      <li class="sec"><a href="#approach">02 Approach</a></li>
-      <li class="sec"><a href="#role">03 Role</a></li>
-      <li class="sec"><a href="#output">04 Output</a></li>
-      <li class="sec"><a href="#impact">05 Impact</a></li>
-      <li class="cs"><a href="story.html">Case study</a></li>
-      <li><a class="back" href="https://agnidas31.github.io/Agnivesh-Das/#work">← All work</a></li>
-    </ul>
-  </div>
-</nav>
+<div class="top"><div class="widecol">
+  <a class="brand" href="https://agnidas31.github.io/Agnivesh-Das/"><i>AD</i>Agnivesh Das</a>
+  <a href="https://agnidas31.github.io/Agnivesh-Das/#work">← <span class="back-full">All </span>work</a>
+</div></div>
 
 <header class="hero">
-  <div class="wrap">
-    <div>
-      <span class="eyebrow">BP · US Fuels Pricing · Margin analytics</span>
-      <h1>Fuel Margin Waterfall</h1>
-      <p class="hook">One cents-per-gallon margin number broken into the drivers behind it, so pricing and supply teams could see not just what the margin was, but why.</p>
-      <div class="byline"><b>Agnivesh Das</b><span class="sep"></span><span>Data Analyst</span><span class="sep"></span><span>BP</span></div>
-      <div class="stack"><span>SQL</span><span>Tableau</span><span>Volume weighting</span><span>Reconciliation</span></div>
-    </div>
-    <div class="art-frame"><span class="cap">fig. 0 · illustrative</span><svg class="art" viewBox="0 0 460 360" role="img" aria-label="A fuel margin waterfall building up to the standard margin"><defs><radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#5eead4" stop-opacity=".45"/><stop offset="1" stop-color="#5eead4" stop-opacity="0"/></radialGradient><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5eead4" stop-opacity=".35"/><stop offset="1" stop-color="#5eead4" stop-opacity="0"/></linearGradient></defs><line x1="24" x2="436" y1="300" y2="300" stroke="rgba(255,255,255,.06)"/><line x1="24" x2="436" y1="235" y2="235" stroke="rgba(255,255,255,.06)"/><line x1="24" x2="436" y1="170" y2="170" stroke="rgba(255,255,255,.06)"/><line x1="24" x2="436" y1="105" y2="105" stroke="rgba(255,255,255,.06)"/><rect class="rise" style="animation-delay:0.20s" x="30" y="209.0" width="40" height="91.0" rx="4" fill="#5eead4"/><text class="fade" style="animation-delay:0.60s;font-family:'JetBrains Mono',ui-monospace,monospace" x="50" y="201.0" text-anchor="middle" fill="#e6f2ef" font-size="11">+7.0</text><text x="50" y="320" text-anchor="middle" fill="#8a9a96" font-size="10" style="font-family:'JetBrains Mono',ui-monospace,monospace">MKT</text><rect class="rise" style="animation-delay:0.34s" x="88" y="79.0" width="40" height="130.0" rx="4" fill="#5eead4"/><text class="fade" style="animation-delay:0.74s;font-family:'JetBrains Mono',ui-monospace,monospace" x="108" y="71.0" text-anchor="middle" fill="#e6f2ef" font-size="11">+10.0</text><text x="108" y="320" text-anchor="middle" fill="#8a9a96" font-size="10" style="font-family:'JetBrains Mono',ui-monospace,monospace">BRAND</text><rect class="rise" style="animation-delay:0.48s" x="146" y="79.0" width="40" height="110.5" rx="4" fill="#ffb547"/><text class="fade" style="animation-delay:0.88s;font-family:'JetBrains Mono',ui-monospace,monospace" x="166" y="71.0" text-anchor="middle" fill="#e6f2ef" font-size="11">−8.5</text><text x="166" y="320" text-anchor="middle" fill="#8a9a96" font-size="10" style="font-family:'JetBrains Mono',ui-monospace,monospace">PREM</text><rect class="rise" style="animation-delay:0.62s" x="204" y="189.5" width="40" height="15.6" rx="4" fill="#ffb547"/><text class="fade" style="animation-delay:1.02s;font-family:'JetBrains Mono',ui-monospace,monospace" x="224" y="181.5" text-anchor="middle" fill="#e6f2ef" font-size="11">−1.2</text><text x="224" y="320" text-anchor="middle" fill="#8a9a96" font-size="10" style="font-family:'JetBrains Mono',ui-monospace,monospace">TERMS</text><rect class="rise" style="animation-delay:0.76s" x="262" y="188.2" width="40" height="16.9" rx="4" fill="#5eead4"/><text class="fade" style="animation-delay:1.16s;font-family:'JetBrains Mono',ui-monospace,monospace" x="282" y="180.2" text-anchor="middle" fill="#e6f2ef" font-size="11">+1.3</text><text x="282" y="320" text-anchor="middle" fill="#8a9a96" font-size="10" style="font-family:'JetBrains Mono',ui-monospace,monospace">VOL</text><rect class="rise" style="animation-delay:0.90s" x="320" y="188.2" width="40" height="1.9" rx="4" fill="#ffb547"/><text class="fade" style="animation-delay:1.30s;font-family:'JetBrains Mono',ui-monospace,monospace" x="340" y="180.2" text-anchor="middle" fill="#e6f2ef" font-size="11">−0.1</text><text x="340" y="320" text-anchor="middle" fill="#8a9a96" font-size="10" style="font-family:'JetBrains Mono',ui-monospace,monospace">OTH</text><rect class="rise" style="animation-delay:1.04s" x="378" y="189.5" width="40" height="110.5" rx="4" fill="#e6f2ef"/><text class="fade" style="animation-delay:1.44s;font-family:'JetBrains Mono',ui-monospace,monospace" x="398" y="181.5" text-anchor="middle" fill="#e6f2ef" font-size="11">8.5</text><text x="398" y="320" text-anchor="middle" fill="#8a9a96" font-size="10" style="font-family:'JetBrains Mono',ui-monospace,monospace">STD</text><g class="fade" style="animation-delay:0.2s"><rect x="24" y="34" width="127" height="22" rx="11" fill="#0b0f14" stroke="#8a9a96"/><text x="88" y="49" text-anchor="middle" fill="#8a9a96" font-size="11.5" style="font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:600">cents per gallon</text></g></svg></div>
-    <div class="results">
-      <div><b data-count>2×</b><span>faster root-cause analysis</span></div><div><b data-count>3</b><span>margin layers in one view</span></div><div><b data-count>Site</b><span>level drill-down, every grade</span></div>
-    </div>
-    <div class="results-note">↑ Headline results as reported. Everything below uses illustrative data.</div>
+  <div class="column">
+    <div class="eyebrow">BP · Fuel Margin Waterfall · Margin analytics</div>
+    <h1>From One Margin Number to Every Cent Explained</h1>
+    <p class="intro">Fuel margin is reported in cents per gallon, and one cent across hundreds of millions of gallons is millions of dollars. But a single number hides everything behind it. The Fuel Margin Waterfall broke it into the drivers that move it, so pricing and supply teams could see not just what the margin was, but why.</p>
+    <div class="byline"><b>Agnivesh Das</b><span class="sep"></span><span>Data Analyst</span><span class="sep"></span><span>BP</span></div>
+    <div class="note"><b>A note on this write-up</b>All figures, charts and examples on this page are illustrative. Prices, volumes and margins have been replaced with fictitious numbers; no real BP data is shown. Only the headline results are reported outcomes.</div>
   </div>
 </header>
-<div class="ticker" aria-label="Illustrative data notice"><div><span>Illustrative data only</span><span>Fictitious numbers throughout</span><span>No real BP data shown</span><span>Illustrative data only</span><span>Fictitious numbers throughout</span><span>No real BP data shown</span><span>Illustrative data only</span><span>Fictitious numbers throughout</span><span>No real BP data shown</span><span>Illustrative data only</span><span>Fictitious numbers throughout</span><span>No real BP data shown</span><span>Illustrative data only</span><span>Fictitious numbers throughout</span><span>No real BP data shown</span><span>Illustrative data only</span><span>Fictitious numbers throughout</span><span>No real BP data shown</span></div></div>
 
-<section id="problem">
-  <div class="wrap">
-    <div class="sec-head" data-reveal>
-      <div class="num">01</div>
-      <p class="kicker">The problem</p>
-      <h2>A margin number with no story behind it</h2>
-      <p class="sub">When margin dropped a cent, nobody could say why without a manual investigation across systems. One cent across hundreds of millions of gallons is millions of dollars.</p>
-    </div>
-    <div class="prob">
-      <div class="card anim" data-reveal><p class="fig"><span>Fig. 1 · Where it started</span><em>illustrative</em></p><div class="onenum"><div class="big"><small>Standard margin, this month</small>7.5 <span>cpg</span><em>▼ 1.0 cpg vs. last month · ≈ $5M</em></div><div class="why"><b>But why?</b><span>Market moved?</span><span>Brand premium changed?</span><span>Supply terms worse?</span><span>Volume vs. invoice?</span><span>Environmental costs?</span></div></div></div>
-      <div class="points">
-        <div class="point" data-reveal><b>Every driver in a different system</b><p>Market prices by terminal, invoices by delivery, volumes by site, terms by contract.</p></div><div class="point" data-reveal><b>Averages lie</b><p>A simple average gives a small site the same weight as a large one.</p></div><div class="point" data-reveal><b>The parts must add up</b><p>A waterfall is only trusted if the bars sum exactly to the reported margin.</p></div>
-      </div>
-    </div>
+<main>
+  <div class="column">
+    <p class="label">The project</p>
+    <h2>A margin waterfall for the US fuel network</h2>
+    <p class="lede">Every margin conversation used to start with “let&#39;s go and find out why.” I owned the data behind the report end to end: bringing pricing, supply cost, invoice and volume data together, making every component add up, and building the Tableau waterfalls.</p>
+    
+    
+      <h3 data-n="01">The starting point: a number with no story</h3>
+      
+    
+      <p>When margin dropped, the business couldn't quickly tell whether the market had moved, the brand premium had changed, supply terms had worsened, or costs had shifted. Each has a different owner and a different fix.</p>
+      
+    
+      
+      <figure class="fig anim fade-up"><figcaption><div><b>The monthly question</b> <span class="ill">Illustrative</span></div><span>Illustrative month</span></figcaption><div class="bignum"><div class="n"><small>Standard margin</small>7.5 <span>cpg</span><em>▼ 1.0 cpg vs. last month · ≈ $5M</em></div><ul><li>But why?</li><li>Did the market move?</li><li>Did the brand premium change?</li><li>Did supply terms get worse?</li><li>Did costs shift?</li></ul></div></figure>
+      
+    
+      <p>Without the breakdown, a one-cent drop was a $5 million mystery.</p>
+      
+    
+      <h3 data-n="02">Why it was hard: every driver lived somewhere else</h3>
+      
+    
+      <p>This wasn't a charting problem. Every piece of the margin came from a different system, at a different level of detail.</p>
+      
+    
+      
+      <figure class="fig anim fade-up"><figcaption><div><b>Where each driver came from</b> <span class="ill">Illustrative</span></div><span>Source and grain</span></figcaption><div class="tbl"><table><thead><tr><th>Source</th><th>Grain</th><th>Used for</th></tr></thead><tbody><tr><td>Market reference prices</td><td>terminal × day × grade</td><td>Baseline cost</td></tr><tr><td>Retail pump prices</td><td>site × day × grade</td><td>Revenue per gallon</td></tr><tr><td>Supply invoices</td><td>delivery</td><td>Actual cost, invoiced volume</td></tr><tr><td>Contract terms</td><td>contract / site</td><td>Terms impact</td></tr><tr><td>Delivered volumes</td><td>site × day × grade</td><td>Weighting, volume variance</td></tr></tbody></table></div></figure>
+      
+    
+      <p>None of these lined up naturally, and a waterfall only works if every bar adds up exactly to the total.</p>
+      
+    
+      <h3 data-n="03">The method: one grain, volume-weighted</h3>
+      
+    
+      <p>I aligned every input to site × day × grade, and stored each component in dollars rather than cents per gallon. Conversion happens only at the very end, so the parts always sum to the whole.</p>
+      
+    
+      
+      <figure class="fig anim fade-up"><figcaption><div><b>Why dollars first</b> <span class="ill">Illustrative</span></div><span>The rule that makes the waterfall reconcile</span></figcaption><div class="formula"><div><b>Component CPG</b> = Σ component $ ÷ Σ gallons</div><div><b>not</b> the average of each site's CPG</div></div></figure>
+      
+    
+      <p>A simple average gives a small site the same weight as a large one. Volume-weighting keeps every bar honest, and each refresh is checked against the finance margin.</p>
+      
+    
+      <h3 data-n="04">Reading the waterfall</h3>
+      
+    
+      <p>Standard margin starts from what anyone could earn at the market's lowest rack price, then adds and subtracts each driver.</p>
+      
+    
+      
+      <figure class="fig anim fade-up"><figcaption><div><b>Standard margin waterfall</b> <span class="ill">Illustrative</span></div><span>One month, network view, cents per gallon</span></figcaption><div class="sx"><div class="sx-in" style="--n:7"><div class="wf" style="--h:240px"><div class="wf-c"><i style="bottom:0.00%;height:35.81%;background:#00866b" data-tip="Market (rack low): +7.0" tabindex="0"><span>+7.0</span></i></div><div class="wf-c"><i style="bottom:35.81%;height:51.15%;background:#00866b" data-tip="Brand value: +10.0" tabindex="0"><span>+10.0</span></i></div><div class="wf-c"><i style="bottom:43.48%;height:43.48%;background:#c97a00" data-tip="bp premium: −8.5" tabindex="0"><span>−8.5</span></i></div><div class="wf-c"><i style="bottom:37.34%;height:6.14%;background:#c97a00" data-tip="Terms: −1.2" tabindex="0"><span>−1.2</span></i></div><div class="wf-c"><i style="bottom:37.34%;height:6.65%;background:#00866b" data-tip="Volume variance: +1.3" tabindex="0"><span>+1.3</span></i></div><div class="wf-c"><i style="bottom:43.48%;height:0.51%;background:#c97a00" data-tip="Others: −0.1" tabindex="0"><span>−0.1</span></i></div><div class="wf-c"><i style="bottom:0.00%;height:43.48%;background:#1c2530" data-tip="Standard margin: 8.5" tabindex="0"><span>8.5</span></i></div></div><div class="cols-x"><span class="">Market (rack low)</span><span class="">Brand value</span><span class="">bp premium</span><span class="">Terms</span><span class="">Volume variance</span><span class="">Others</span><span class="tot">Standard margin</span></div></div></div><details class="dt"><summary>View data</summary><table><thead><tr><th>Component</th><th>Value</th></tr></thead><tbody><tr><td>Market (rack low)</td><td>+7.0</td></tr><tr><td>Brand value</td><td>+10.0</td></tr><tr><td>bp premium</td><td>−8.5</td></tr><tr><td>Terms</td><td>−1.2</td></tr><tr><td>Volume variance</td><td>+1.3</td></tr><tr><td>Others</td><td>−0.1</td></tr><tr><td>Standard margin</td><td>8.5</td></tr></tbody></table></details></figure>
+      
+    
+      <p>At 500 million gallons, 8.5 cents per gallon is $42.5 million of standard margin, and every cent of it is attributed to a driver.</p>
+      
+    
+      <h3 data-n="05">What moved this month?</h3>
+      
+    
+      <p>When margin fell by a cent, the waterfall showed which bar moved.</p>
+      
+    
+      
+      <figure class="fig anim fade-up"><figcaption><div><b>Change vs. last month, by driver</b> <span class="ill">Illustrative</span></div><span>cpg</span></figcaption><div class="db"><div class="db-row"><span class="hb-l">Market (rack low)</span><span class="db-t"><i style="left:50%;width:7.91%;background:#00866b" data-tip="Market (rack low): +0.2" tabindex="0"></i></span><span class="hb-v">+0.2</span></div><div class="db-row"><span class="hb-l">Brand value</span><span class="db-t"><i style="left:50%;width:0.00%;background:#00866b" data-tip="Brand value: 0.0" tabindex="0"></i></span><span class="hb-v">0.0</span></div><div class="db-row"><span class="hb-l">bp premium</span><span class="db-t"><i style="right:50%;width:43.48%;background:#c97a00" data-tip="bp premium: −1.1" tabindex="0"></i></span><span class="hb-v">−1.1</span></div><div class="db-row"><span class="hb-l">Terms</span><span class="db-t"><i style="right:50%;width:3.95%;background:#c97a00" data-tip="Terms: −0.1" tabindex="0"></i></span><span class="hb-v">−0.1</span></div><div class="db-row"><span class="hb-l">Volume variance</span><span class="db-t"><i style="left:50%;width:0.00%;background:#00866b" data-tip="Volume variance: 0.0" tabindex="0"></i></span><span class="hb-v">0.0</span></div><div class="db-row"><span class="hb-l">Others</span><span class="db-t"><i style="left:50%;width:0.00%;background:#00866b" data-tip="Others: 0.0" tabindex="0"></i></span><span class="hb-v">0.0</span></div><div class="db-row hl"><span class="hb-l">Standard margin</span><span class="db-t"><i style="right:50%;width:39.53%;background:#c97a00" data-tip="Standard margin: −1.0" tabindex="0"></i></span><span class="hb-v">−1.0</span></div></div><details class="dt"><summary>View data</summary><table><thead><tr><th>Item</th><th>Change</th></tr></thead><tbody><tr><td>Market (rack low)</td><td>+0.2</td></tr><tr><td>Brand value</td><td>0.0</td></tr><tr><td>bp premium</td><td>−1.1</td></tr><tr><td>Terms</td><td>−0.1</td></tr><tr><td>Volume variance</td><td>0.0</td></tr><tr><td>Others</td><td>0.0</td></tr><tr><td>Standard margin</td><td>−1.0</td></tr></tbody></table></details></figure>
+      
+    
+      <p>Brand value held, so pricing wasn't the problem. The bp premium widened, so the conversation goes to supply, with the size of the gap already on the table.</p>
+      
+    
+      <h3 data-n="06">Three layers of margin</h3>
+      
+    
+      <p>The same approach extends beyond the fuel itself, to what bp's supply chain adds and to environmental and regulatory effects.</p>
+      
+    
+      
+      <figure class="fig anim fade-up"><figcaption><div><b>Standard → integrated → total margin</b> <span class="ill">Illustrative</span></div><span>Illustrative, cents per gallon</span></figcaption><div class="sx"><div class="sx-in" style="--n:8"><div class="wf" style="--h:220px"><div class="wf-c"><i style="bottom:0.00%;height:65.41%;background:#00866b" data-tip="Standard: +8.5" tabindex="0"><span>+8.5</span></i></div><div class="wf-c"><i style="bottom:65.41%;height:10.77%;background:#00866b" data-tip="Logistics: +1.4" tabindex="0"><span>+1.4</span></i></div><div class="wf-c"><i style="bottom:76.18%;height:6.93%;background:#00866b" data-tip="Supply &amp; trading: +0.9" tabindex="0"><span>+0.9</span></i></div><div class="wf-c"><i style="bottom:0.00%;height:83.11%;background:#1c2530" data-tip="Integrated: 10.8" tabindex="0"><span>10.8</span></i></div><div class="wf-c"><i style="bottom:78.49%;height:4.62%;background:#c97a00" data-tip="Lag effect: −0.6" tabindex="0"><span>−0.6</span></i></div><div class="wf-c"><i style="bottom:78.49%;height:8.46%;background:#00866b" data-tip="RINs: +1.1" tabindex="0"><span>+1.1</span></i></div><div class="wf-c"><i style="bottom:84.65%;height:2.31%;background:#c97a00" data-tip="Programme costs: −0.3" tabindex="0"><span>−0.3</span></i></div><div class="wf-c"><i style="bottom:0.00%;height:84.65%;background:#1c2530" data-tip="Total: 11.0" tabindex="0"><span>11.0</span></i></div></div><div class="cols-x"><span class="">Standard</span><span class="">Logistics</span><span class="">Supply &amp; trading</span><span class="tot">Integrated</span><span class="">Lag effect</span><span class="">RINs</span><span class="">Programme costs</span><span class="tot">Total</span></div></div></div><details class="dt"><summary>View data</summary><table><thead><tr><th>Component</th><th>Value</th></tr></thead><tbody><tr><td>Standard</td><td>+8.5</td></tr><tr><td>Logistics</td><td>+1.4</td></tr><tr><td>Supply &amp; trading</td><td>+0.9</td></tr><tr><td>Integrated</td><td>10.8</td></tr><tr><td>Lag effect</td><td>−0.6</td></tr><tr><td>RINs</td><td>+1.1</td></tr><tr><td>Programme costs</td><td>−0.3</td></tr><tr><td>Total</td><td>11.0</td></tr></tbody></table></details></figure>
+      
+    
+      <p>One view, three layers, and the same breakdown from the whole network down to a single site and grade.</p>
+      
+    
+      <h3 data-n="07">What I built</h3>
+      
+    
+      
+      <div class="callouts"><div class="callout fade-up"><b>The margin dataset</b>Pricing, supply cost, invoice and volume data aligned to site × day × grade, volume-weighted, decomposed into drivers and reconciled to the total.</div><div class="callout fade-up"><b>The Tableau waterfalls</b>Monthly, year-to-date and year-on-year views, filterable from channel of trade down to individual site and fuel grade.</div></div>
+      
+    
+
+    <section class="results">
+      <p class="label">Results</p>
+      <div class="tiles"><div class="tile fade-up"><b data-count>2×</b><span>faster root-cause analysis</span></div><div class="tile fade-up"><b data-count>3</b><span>margin layers in one view</span></div><div class="tile fade-up"><b data-count>Every cent</b><span>traced to a driver</span></div><div class="tile fade-up"><b data-count>Site</b><span>level drill-down, every grade</span></div></div>
+    </section>
+  </div>
+</main>
+
+<section class="why">
+  <div class="column">
+    <p class="label">Why this mattered</p>
+    <h2>Changing the question</h2>
+    <p>The waterfall moved every margin conversation from “what was our margin?” to “what moved our margin, and who owns it?” Root causes that used to take an investigation were read straight off the chart, twice as fast, and supply decisions got sharper because the gap was already quantified.</p>
+    <div class="tiles"><div class="tile fade-up"><b>6</b><span>drivers in standard margin</span></div><div class="tile fade-up"><b>3</b><span>layers: standard, integrated, total</span></div><div class="tile fade-up"><b>site × day</b><span>× grade: the common grain</span></div><div class="tile fade-up"><b>3</b><span>views: monthly, YTD, year-on-year</span></div></div>
   </div>
 </section>
-
-<section id="approach" class="dark">
-  <div class="wrap">
-    <div class="sec-head" data-reveal>
-      <div class="num">02</div>
-      <p class="kicker">The approach</p>
-      <h2>One grain, volume-weighted, every driver as its own bar</h2>
-      <p class="sub">Store each component in dollars at site × day × grade; convert to cents per gallon only at report time, so the bars always sum to the total.</p>
-    </div>
-    <div class="pipe" data-reveal>
-      <div class="stage"><span class="dot">01</span><b>Ingest</b><p>Market reference prices, retail prices, invoices, contract terms and volumes.</p></div><div class="stage"><span class="dot">02</span><b>Align</b><p>Map everything to site × day × fuel grade, with site attributes attached.</p></div><div class="stage"><span class="dot">03</span><b>Weight</b><p>Store components in dollars; divide by total gallons at the last step.</p></div><div class="stage"><span class="dot">04</span><b>Decompose</b><p>Calculate each driver so components sum exactly to the total.</p></div><div class="stage"><span class="dot">05</span><b>Reconcile</b><p>Check against the finance margin every refresh; watch the “others” bar.</p></div><div class="stage"><span class="dot">06</span><b>Report</b><p>Tableau waterfalls: monthly, YTD and year on year, from network to site.</p></div>
-    </div>
-    <div class="extra anim" data-reveal>
-      <p class="fig"><span>Fig. 2 · Three layers of margin (illustrative, cents per gallon)</span></p>
-      <div class="sx"><div class="sx-in" style="--n:8"><div class="wf" style="--h:220px"><div class="wf-c"><i style="bottom:0.00%;height:65.41%;background:#00866b" data-tip="Standard: +8.5" tabindex="0"><span>+8.5</span></i></div><div class="wf-c"><i style="bottom:65.41%;height:10.77%;background:#00866b" data-tip="Logistics: +1.4" tabindex="0"><span>+1.4</span></i></div><div class="wf-c"><i style="bottom:76.18%;height:6.93%;background:#00866b" data-tip="Supply &amp; trading: +0.9" tabindex="0"><span>+0.9</span></i></div><div class="wf-c"><i style="bottom:0.00%;height:83.11%;background:#1c2530" data-tip="Integrated: 10.8" tabindex="0"><span>10.8</span></i></div><div class="wf-c"><i style="bottom:78.49%;height:4.62%;background:#c97a00" data-tip="Lag effect: −0.6" tabindex="0"><span>−0.6</span></i></div><div class="wf-c"><i style="bottom:78.49%;height:8.46%;background:#00866b" data-tip="RINs: +1.1" tabindex="0"><span>+1.1</span></i></div><div class="wf-c"><i style="bottom:84.65%;height:2.31%;background:#c97a00" data-tip="Programme costs: −0.3" tabindex="0"><span>−0.3</span></i></div><div class="wf-c"><i style="bottom:0.00%;height:84.65%;background:#1c2530" data-tip="Total: 11.0" tabindex="0"><span>11.0</span></i></div></div><div class="cols-x"><span class="">Standard</span><span class="">Logistics</span><span class="">Supply &amp; trading</span><span class="tot">Integrated</span><span class="">Lag effect</span><span class="">RINs</span><span class="">Programme costs</span><span class="tot">Total</span></div></div></div><details class="dt"><summary>View data</summary><table><thead><tr><th>Component</th><th>Value</th></tr></thead><tbody><tr><td>Standard</td><td>+8.5</td></tr><tr><td>Logistics</td><td>+1.4</td></tr><tr><td>Supply &amp; trading</td><td>+0.9</td></tr><tr><td>Integrated</td><td>10.8</td></tr><tr><td>Lag effect</td><td>−0.6</td></tr><tr><td>RINs</td><td>+1.1</td></tr><tr><td>Programme costs</td><td>−0.3</td></tr><tr><td>Total</td><td>11.0</td></tr></tbody></table></details>
-    </div>
-  </div>
-</section>
-
-<section id="role">
-  <div class="wrap">
-    <div class="sec-head" data-reveal>
-      <div class="num">03</div>
-      <p class="kicker">My contribution</p>
-      <h2>What I owned, end to end</h2>
-      <p class="sub">Data Analyst. I owned the data behind the report end to end.</p>
-    </div>
-    <div class="contrib">
-      
-      <div class="ccard" data-reveal style="transition-delay:0.0s"><span class="idx">01</span><div class="lab">Data preparation</div><h3>Brought the drivers together</h3><p>Combined pricing, supply cost, invoice and volume data from multiple source systems.</p>
-        <div class="chips"><span>Market prices</span><span>Invoices</span><span>Contract terms</span><span>Volumes</span></div></div>
-      
-      <div class="ccard" data-reveal style="transition-delay:0.1s"><span class="idx">02</span><div class="lab">Transformation</div><h3>Made the parts add up</h3><p>Aligned everything to site × day × grade, volume-weighted every component and built the decomposition.</p>
-        <div class="chips"><span>Common grain</span><span>Volume weighting</span><span>Reconciliation</span></div></div>
-      
-      <div class="ccard" data-reveal style="transition-delay:0.2s"><span class="idx">03</span><div class="lab">Reporting</div><h3>Built the Tableau waterfalls</h3><p>Monthly, year-to-date and year-on-year views, filterable from channel of trade down to site and grade.</p>
-        <div class="chips"><span>5 views</span><span>10 filters</span></div></div>
-      
-    </div>
-  </div>
-</section>
-
-<section id="output" class="grid-bg">
-  <div class="wrap">
-    <div class="sec-head" data-reveal>
-      <div class="num">04</div>
-      <p class="kicker">The output</p>
-      <h2>The answer to “why did margin move?” read straight off the chart</h2>
-      <p class="sub">A recreation of the finished product with fictitious data. Hover or tap any bar or point for its value.</p>
-    </div>
-    <div class="dash" data-reveal>
-      <aside class="side">
-        <div class="lights"><i></i><i></i><i></i></div>
-        <div class="app">Fuel Margin Waterfall</div>
-        <a href="#panel-1" class="on">Standard margin waterfall</a><a href="#panel-2" class="">What moved this month</a><a href="#panel-3" class="">Reading it</a>
-        <div class="foot-note">DATA: ILLUSTRATIVE<br>REFRESH: MONTHLY</div>
-      </aside>
-      <div class="main">
-        <div class="topbar"><span class="t">Overview</span><span class="pill">Period: last 12 months ▾</span><span class="pill">Scope: all ▾</span><span class="pill live">● Illustrative data</span></div>
-        <div class="panels">
-          
-          <div id="panel-1" class="card anim wide"><h3>Standard margin waterfall</h3><p class="csub">One month, network view, cents per gallon</p><div class="sx"><div class="sx-in" style="--n:7"><div class="wf" style="--h:240px"><div class="wf-c"><i style="bottom:0.00%;height:35.81%;background:#00866b" data-tip="Market (rack low): +7.0" tabindex="0"><span>+7.0</span></i></div><div class="wf-c"><i style="bottom:35.81%;height:51.15%;background:#00866b" data-tip="Brand value: +10.0" tabindex="0"><span>+10.0</span></i></div><div class="wf-c"><i style="bottom:43.48%;height:43.48%;background:#c97a00" data-tip="bp premium: −8.5" tabindex="0"><span>−8.5</span></i></div><div class="wf-c"><i style="bottom:37.34%;height:6.14%;background:#c97a00" data-tip="Terms: −1.2" tabindex="0"><span>−1.2</span></i></div><div class="wf-c"><i style="bottom:37.34%;height:6.65%;background:#00866b" data-tip="Volume variance: +1.3" tabindex="0"><span>+1.3</span></i></div><div class="wf-c"><i style="bottom:43.48%;height:0.51%;background:#c97a00" data-tip="Others: −0.1" tabindex="0"><span>−0.1</span></i></div><div class="wf-c"><i style="bottom:0.00%;height:43.48%;background:#1c2530" data-tip="Standard margin: 8.5" tabindex="0"><span>8.5</span></i></div></div><div class="cols-x"><span class="">Market (rack low)</span><span class="">Brand value</span><span class="">bp premium</span><span class="">Terms</span><span class="">Volume variance</span><span class="">Others</span><span class="tot">Standard margin</span></div></div></div><details class="dt"><summary>View data</summary><table><thead><tr><th>Component</th><th>Value</th></tr></thead><tbody><tr><td>Market (rack low)</td><td>+7.0</td></tr><tr><td>Brand value</td><td>+10.0</td></tr><tr><td>bp premium</td><td>−8.5</td></tr><tr><td>Terms</td><td>−1.2</td></tr><tr><td>Volume variance</td><td>+1.3</td></tr><tr><td>Others</td><td>−0.1</td></tr><tr><td>Standard margin</td><td>8.5</td></tr></tbody></table></details></div>
-          
-          <div id="panel-2" class="card anim"><h3>What moved this month</h3><p class="csub">Change vs. last month, cpg</p><div class="db"><div class="db-row"><span class="hb-l">Market (rack low)</span><span class="db-t"><i style="left:50%;width:7.91%;background:#00866b" data-tip="Market (rack low): +0.2" tabindex="0"></i></span><span class="hb-v">+0.2</span></div><div class="db-row"><span class="hb-l">Brand value</span><span class="db-t"><i style="left:50%;width:0.00%;background:#00866b" data-tip="Brand value: 0.0" tabindex="0"></i></span><span class="hb-v">0.0</span></div><div class="db-row"><span class="hb-l">bp premium</span><span class="db-t"><i style="right:50%;width:43.48%;background:#c97a00" data-tip="bp premium: −1.1" tabindex="0"></i></span><span class="hb-v">−1.1</span></div><div class="db-row"><span class="hb-l">Terms</span><span class="db-t"><i style="right:50%;width:3.95%;background:#c97a00" data-tip="Terms: −0.1" tabindex="0"></i></span><span class="hb-v">−0.1</span></div><div class="db-row"><span class="hb-l">Volume variance</span><span class="db-t"><i style="left:50%;width:0.00%;background:#00866b" data-tip="Volume variance: 0.0" tabindex="0"></i></span><span class="hb-v">0.0</span></div><div class="db-row"><span class="hb-l">Others</span><span class="db-t"><i style="left:50%;width:0.00%;background:#00866b" data-tip="Others: 0.0" tabindex="0"></i></span><span class="hb-v">0.0</span></div><div class="db-row hl"><span class="hb-l">Standard margin</span><span class="db-t"><i style="right:50%;width:39.53%;background:#c97a00" data-tip="Standard margin: −1.0" tabindex="0"></i></span><span class="hb-v">−1.0</span></div></div><details class="dt"><summary>View data</summary><table><thead><tr><th>Item</th><th>Change</th></tr></thead><tbody><tr><td>Market (rack low)</td><td>+0.2</td></tr><tr><td>Brand value</td><td>0.0</td></tr><tr><td>bp premium</td><td>−1.1</td></tr><tr><td>Terms</td><td>−0.1</td></tr><tr><td>Volume variance</td><td>0.0</td></tr><tr><td>Others</td><td>0.0</td></tr><tr><td>Standard margin</td><td>−1.0</td></tr></tbody></table></details></div>
-          
-          <div id="panel-3" class="card anim"><h3>Reading it</h3><p class="csub">Illustrative month</p><div class="readout"><p><b>Brand value held.</b> Pricing at the pump wasn't the problem.</p><p><b>The bp premium widened by 1.1 cpg.</b> Branded supply cost more relative to the market low.</p><p><b>So the conversation goes to supply, not pricing</b>, with the size of the gap already on the table.</p><p class="calc">8.5 cpg × 500M gallons = $42.5M standard margin</p></div></div>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="impact" class="dark">
-  <div class="wrap">
-    <div class="sec-head" data-reveal>
-      <div class="num">05</div>
-      <p class="kicker">Impact</p>
-      <h2>What changed</h2>
-      <p class="sub">Reported results, and how the way the business worked changed.</p>
-    </div>
-    <div class="impact" data-reveal>
-      <div class="icard"><div class="m" data-count>2×</div><div class="l">faster root-cause analysis</div><div class="d">Margin moves explained straight from the chart, sharpening supply decisions.</div></div><div class="icard"><div class="m" data-count>3 layers</div><div class="l">in one view</div><div class="d">Standard, integrated and environmental margin together.</div></div><div class="icard"><div class="m" data-count>Every cent</div><div class="l">explained</div><div class="d">Each change traced to a specific driver and owner.</div></div><div class="icard"><div class="m" data-count>Network → site</div><div class="l">same breakdown</div><div class="d">At every level, for every fuel grade.</div></div>
-    </div>
-    <div class="ba">
-      <div class="ba-row head"><span></span><span>Before</span><span></span><span>After</span></div>
-      
-      <div class="ba-row" data-reveal><span class="k">What you see</span><span class="b">One margin number</span><span class="ar">→</span><span class="a">Every driver as its own bar</span></div>
-      
-      <div class="ba-row" data-reveal><span class="k">Explaining a change</span><span class="b">Manual investigation</span><span class="ar">→</span><span class="a">Read straight off the chart</span></div>
-      
-      <div class="ba-row" data-reveal><span class="k">Weighting</span><span class="b">Inconsistent averages</span><span class="ar">→</span><span class="a">Volume-weighted throughout</span></div>
-      
-      <div class="ba-row" data-reveal><span class="k">Trust</span><span class="b">Didn&#39;t always tie to finance</span><span class="ar">→</span><span class="a">Components reconcile to the total</span></div>
-      
-    </div>
-    <p class="closing" data-reveal>From “what was our margin?” to “what moved our margin, and who owns it?”</p>
-  </div>
-</section>
-
-<div class="more">
-  <div class="wrap">
-    <div><h2>Want the full story?</h2><p>The written case study covers the constraints, a worked example and the trade-offs.</p></div>
-    <div class="btns">
-      <a class="btn primary" href="story.html">Read the case study →</a>
-      
-      <a class="btn" href="https://agnidas31.github.io/Agnivesh-Das/#work">Back to portfolio</a>
-    </div>
-  </div>
-</div>
-<div class="foot">
-  <div class="wrap">
-    <span>Agnivesh Das · <a href="https://agnidas31.github.io/Agnivesh-Das/">Portfolio</a> · <a href="https://www.linkedin.com/in/agnivesh-das/">LinkedIn</a></span>
-    <span>Illustrative figures throughout; confidential details omitted.</span>
-  </div>
-</div>
+<div class="foot"><div class="widecol">
+  <span>Agnivesh Das · <a href="https://agnidas31.github.io/Agnivesh-Das/">Portfolio</a> · <a href="https://www.linkedin.com/in/agnivesh-das/">LinkedIn</a></span>
+  <span>Illustrative example; figures and details altered.</span>
+</div></div>
 <script>
   (function () {
     var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     var bar = document.getElementById('progress');
-    addEventListener('scroll', function () {
-      var h = document.documentElement; bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
-    }, { passive: true });
-
-    // Reveal on scroll (sections, cards, chart entrances).
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('[data-reveal], .anim').forEach(function (el) { io.observe(el); });
-
-    // Active section in the nav.
-    var links = {}; document.querySelectorAll('.nav .sec a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
-    var so = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting && links[e.target.id]) {
-        Object.values(links).forEach(function (a) { a.classList.remove('on'); }); links[e.target.id].classList.add('on'); } });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    document.querySelectorAll('section[id]').forEach(function (s) { so.observe(s); });
-
-    // Count-up for single-number headline metrics ("38%", "$8M", "4×"); others stay as written.
+    addEventListener('scroll', function () { var h = document.documentElement; bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%'; }, { passive: true });
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.2 });
+    document.querySelectorAll('.anim, .fade-up').forEach(function (el) { io.observe(el); });
     function countUp(el) {
-      var m = el.textContent.trim().match(/^([^\d]*)(\d+(?:\.\d+)?)([^\d]*)$/);
-      if (!m || reduce) return;
+      var m = el.textContent.trim().match(/^([^\d]*)(\d+(?:\.\d+)?)([^\d]*)$/); if (!m || reduce) return;
       var end = parseFloat(m[2]), dec = (m[2].split('.')[1] || '').length, t0 = null;
-      function step(t) { if (!t0) t0 = t; var p = Math.min((t - t0) / 1200, 1), e = 1 - Math.pow(1 - p, 3);
-        el.textContent = m[1] + (end * e).toFixed(dec) + m[3]; if (p < 1) requestAnimationFrame(step); }
+      function step(t) { if (!t0) t0 = t; var p = Math.min((t - t0) / 1100, 1), e = 1 - Math.pow(1 - p, 3); el.textContent = m[1] + (end * e).toFixed(dec) + m[3]; if (p < 1) requestAnimationFrame(step); }
       requestAnimationFrame(step);
     }
-    var co = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { countUp(e.target); co.unobserve(e.target); } });
-    }, { threshold: 0.6 });
+    var co = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { countUp(e.target); co.unobserve(e.target); } }); }, { threshold: 0.6 });
     document.querySelectorAll('[data-count]').forEach(function (el) { co.observe(el); });
-
-    // Tooltips on every chart mark.
     var tip = document.getElementById('tip');
-    function show(el) {
-      tip.textContent = el.getAttribute('data-tip');
-      var r = el.getBoundingClientRect(), w = tip.offsetWidth;
-      var x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), innerWidth - w - 8);
-      var y = r.top - tip.offsetHeight - 8; if (y < 8) y = r.bottom + 8;
-      tip.style.left = x + 'px'; tip.style.top = y + 'px'; tip.style.opacity = 1;
-    }
+    function show(el) { tip.textContent = el.getAttribute('data-tip'); var r = el.getBoundingClientRect(), w = tip.offsetWidth;
+      tip.style.left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), innerWidth - w - 8) + 'px';
+      var y = r.top - tip.offsetHeight - 8; tip.style.top = (y < 8 ? r.bottom + 8 : y) + 'px'; tip.style.opacity = 1; }
     function hide() { tip.style.opacity = 0; }
     document.querySelectorAll('[data-tip]').forEach(function (el) {
-      el.addEventListener('mouseenter', function () { show(el); });
-      el.addEventListener('focus', function () { show(el); });
-      el.addEventListener('click', function () { show(el); });
-      el.addEventListener('mouseleave', hide); el.addEventListener('blur', hide);
-    });
+      ['mouseenter', 'focus', 'click'].forEach(function (ev) { el.addEventListener(ev, function () { show(el); }); });
+      el.addEventListener('mouseleave', hide); el.addEventListener('blur', hide); });
     addEventListener('scroll', hide, { passive: true });
   })();
 </script>
